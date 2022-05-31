@@ -1,5 +1,6 @@
 const faker=require("faker")
 const boom=require('@hapi/boom')
+const pool = require("../libs/postgres_pull")
 
 class StudentService{
     constructor(){
@@ -27,8 +28,10 @@ class StudentService{
         this.students.push(newStudent)
         return newStudent
     }
-    async find(){
-        return this.students
+    async find() {
+        const query='select * from public.estudiantes'
+        const students=await pool.query(query)
+        return students.rows
     }
     async findone(id){
         const student=this.students.find(item=>item.id===id)
